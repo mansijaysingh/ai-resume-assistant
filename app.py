@@ -1,5 +1,6 @@
 import streamlit as st
 from utils.resume_parser import extract_resume_text
+from utils.jd_extractor import extract_job_description
 
 
 st.set_page_config(page_title="AI Resume & Job Match Assistant")
@@ -56,4 +57,16 @@ elif not st.session_state.job_description:
     st.warning("⚠️ Please paste the job description.")
 
 else: 
-    st.success("✅ Resume and Job Description are ready for analysis.")
+    
+    uploaded_image = st.file_uploader(
+       "Upload Job Description Screenshot",
+        type=["png", "jpg", "jpeg"]
+    )
+
+
+    if uploaded_image:
+       
+       with st.spinner("Extracting Job Description..."):
+          extracted_text= extract_job_description(uploaded_image)
+
+       st.session_state.job_description = extracted_text
