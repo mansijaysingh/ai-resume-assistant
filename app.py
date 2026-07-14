@@ -11,6 +11,8 @@ st.write("Upload your resume to get started.")
 if "resume_text" not in st.session_state:
     st.session_state.resume_text=""
 
+if "job_description" not in st.session_state:
+   st.session_state.job_description= ""
 
 uploaded_resume=st.file_uploader(
   "Upload Resume (PDF)",
@@ -26,3 +28,32 @@ if uploaded_resume:
 
   with st.expander("📄 View Extracted Resume Text"):
      st.text(st.session_state.resume_text)
+
+
+
+st.subheader("💼 Job Description")
+
+input_method= st.radio(
+   "Choose Job Description Input Method",
+   ["Text Input", "Screenshot Upload"],
+   horizontal=True
+)
+
+
+
+if input_method == "Text Input":
+  st.session_state.job_description  = st.text_area(
+   "Paste Job Description Here",
+   height=250,
+   placeholder="Paste the complete job description..."
+)
+
+
+if not st.session_state.resume_text:
+    st.warning("⚠️ Please upload your resume.")
+
+elif not st.session_state.job_description:
+    st.warning("⚠️ Please paste the job description.")
+
+else: 
+    st.success("✅ Resume and Job Description are ready for analysis.")
