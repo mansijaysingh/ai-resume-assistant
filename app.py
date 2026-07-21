@@ -43,30 +43,38 @@ input_method= st.radio(
 
 
 if input_method == "Text Input":
-  st.session_state.job_description  = st.text_area(
-   "Paste Job Description Here",
-   height=250,
-   placeholder="Paste the complete job description..."
-)
 
+    st.session_state.job_description = st.text_area(
+        "Paste Job Description Here",
+        height=250,
+        placeholder="Paste the complete job description..."
+    )
+
+else:
+
+    uploaded_image = st.file_uploader(
+        "Upload Job Description Screenshot",
+        type=["png", "jpg", "jpeg"]
+    )
+
+    if uploaded_image:
+
+        with st.spinner("Extracting Job Description..."):
+
+            st.session_state.job_description = extract_job_description(uploaded_image)
+
+            st.session_state.job_description = st.text_area(
+               "Extracted Job Description",
+               value= st.session_state.job_description,
+               height=250
+            )
 
 if not st.session_state.resume_text:
     st.warning("⚠️ Please upload your resume.")
 
 elif not st.session_state.job_description:
-    st.warning("⚠️ Please paste the job description.")
+    st.warning("⚠️ Please provide the job description.")
 
 else: 
     
-    uploaded_image = st.file_uploader(
-       "Upload Job Description Screenshot",
-        type=["png", "jpg", "jpeg"]
-    )
-
-
-    if uploaded_image:
-       
-       with st.spinner("Extracting Job Description..."):
-          extracted_text= extract_job_description(uploaded_image)
-
-       st.session_state.job_description = extracted_text
+  st.success("✅ Resume and Job Description are ready.")
